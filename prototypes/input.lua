@@ -1,0 +1,23 @@
+data:extend({
+  {
+    type = "custom-input",
+    name = "give-negative-space",
+    key_sequence = "CONTROL + SHIFT + N",
+    order = "a",
+    localised_name = "Spawn negative space TODO",
+    action = "spawn-item",
+    item_to_spawn = "negative-space",
+  },
+  {
+    type = "shortcut",
+    name = "give-negative-space",
+    action = "spawn-item",
+    localised_name = "Spawn negative space TODO",
+    associated_control_input = "give-negative-space",
+    item_to_spawn = "negative-space",
+    icon = "__negative_space__/graphics/icon.png",
+    icon_size = 48,
+    small_icon = "__negative_space__/graphics/icon.png",
+    small_icon_size = 48,
+  },
+})
