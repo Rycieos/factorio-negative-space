@@ -9,8 +9,6 @@ data:extend({
     collision_box = { { -0.4, -0.4 }, { 0.4, 0.4 } },
     collision_mask = {
       layers = {
-        water_tile = true,
-        floor = true,
         object = true,
         is_lower_object = true,
       },
