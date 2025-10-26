@@ -21,7 +21,6 @@ data:extend({
       "not-upgradable",
       "not-in-kill-statistics",
     },
-    hidden_in_factoriopedia = true,
     icon = "__negative_space__/graphics/icon.png",
     icon_size = 48,
     minable = { mining_time = 0.1 },
