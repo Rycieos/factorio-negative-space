@@ -14,7 +14,6 @@ data:extend({
       },
     },
     flags = {
-      "not-rotatable",
       "placeable-player",
       "player-creation",
       "not-flammable",
@@ -40,5 +39,6 @@ data:extend({
     },
     -- We will use graphics_variation as our stable flag.
     random_variation_on_create = false,
+    render_layer = "lower-object",
   },
 })
