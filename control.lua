@@ -1,5 +1,6 @@
-require("scripts/building")
-require("scripts/give_item")
+require("scripts.blueprint")
+require("scripts.building")
+require("scripts.give_item")
 
 script.on_event(defines.events.on_built_entity, on_built_entity, {
   { filter = "name", name = "negative-space" },
@@ -26,3 +27,5 @@ script.on_event(defines.events.on_player_pipette, function(event)
     give_negative_space(event.player_index)
   end
 end)
+
+script.on_event(defines.events.on_player_setup_blueprint, on_setup_blueprint)
