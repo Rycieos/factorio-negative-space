@@ -1,4 +1,5 @@
 require("__core__/lualib/story")
+require("__negative_space__/prototypes/simulation/util")
 require("__negative_space__/control")
 
 player = game.simulation.create_test_player({ name = "Player" })
@@ -6,55 +7,6 @@ player.teleport({ 0, 5.5 })
 game.simulation.camera_player = player
 game.simulation.camera_position = { 0, 1 }
 game.simulation.camera_player_cursor_position = player.position
-
----@param x double
----@param y double
----@return fun(): boolean
-local function move_cursor(x, y)
-  return function()
-    return game.simulation.move_cursor({ position = { x, y } })
-  end
-end
-
----@param control string
----@return fun()
-local function control_press(control)
-  return function()
-    game.simulation.control_press({
-      control = control,
-      notify = player.input_method ~= defines.input_method.game_controller,
-    })
-  end
-end
-
----@param control string
----@param direction "up"|"down"
----@return fun()
-local function control_up_or_down(control, direction)
-  return function()
-    if direction == "down" then
-      game.simulation.control_down({ control = control, notify = false })
-    else
-      game.simulation.control_up({ control = control, notify = false })
-    end
-  end
-end
-
----@param phase "start"|"end"
----@return fun()
-local function select_drag(phase)
-  return function()
-    if player.input_method ~= defines.input_method.game_controller then
-      if phase == "start" then
-        game.simulation.control_down({ control = "select-for-blueprint", notify = false })
-      else
-        game.simulation.control_up({ control = "select-for-blueprint", notify = false })
-      end
-    else
-      game.simulation.control_press({ control = "select-for-blueprint", notify = false })
-    end
-  end
-end
 
 tip_story_init({
   {

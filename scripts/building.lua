@@ -47,7 +47,6 @@ function on_built_entity(event)
       end
       replace_entity(entity, player)
     else
-      log("built an unstable ghost one")
       entity.mine()
     end
   end
