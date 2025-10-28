@@ -1,6 +1,4 @@
-local math2d = require("math2d")
-local position_add = math2d.position.add
-local position_ensure_xy = math2d.position.ensure_xy
+local bbutil = require("scripts.util.bounding_box")
 
 ---@alias GridMap table<int32, table<int32, GridMask>>
 
@@ -26,16 +24,12 @@ local function ensure_x(map, x)
   return map[x]
 end
 
--- Get the mask at a position.
----@param map GridMap
+--
 ---@param position MapPosition
----@return GridMask?
----@nodiscard
-local function get(map, position)
-  position = position_ensure_xy(position)
-  return ensure_x(map, position.x)[position.y]
+---@return {x: int32, y: int32}
+local function ensure_xy(position)
+  return { x = math.floor(position.x or position[1]), y = math.floor(position.y or position[2]) }
 end
-grid_map.get = get
 
 -- Insert a mask into a position. Merges with any value already there, meaning a
 -- bitwise or.
@@ -43,37 +37,20 @@ grid_map.get = get
 ---@param position MapPosition
 ---@param mask GridMask
 local function insert(map, position, mask)
-  position = position_ensure_xy(position)
+  position = ensure_xy(position)
   local x = ensure_x(map, position.x)
   x[position.y] = bit32.bor((x[position.y] or 0), mask)
 end
 grid_map.insert = insert
 
--- Insert a mask into the 4 tiles orthoginally surounding the position.
+-- Insert a mask into the tiles orthoginally surounding the bounding box.
 ---@param map GridMap
----@param position MapPosition
+---@param box BoundingBox
 ---@param mask GridMask
-function grid_map.suround(map, position, mask)
-  insert(map, position_add(position, { x = -1, y = 0 }), mask)
-  insert(map, position_add(position, { x = 1, y = 0 }), mask)
-  insert(map, position_add(position, { x = 0, y = -1 }), mask)
-  insert(map, position_add(position, { x = 0, y = 1 }), mask)
-end
-
--- Returns true if the grid point at position matches at least one bit of mask,
--- but does not match any bits of not_mask.
----@param map GridMap
----@param position MapPosition
----@param mask GridMask
----@param not_mask? GridMask
----@return boolean
----@nodiscard
-function grid_map.matches(map, position, mask, not_mask)
-  local pos_mask = get(map, position)
-  if not_mask and bit32.btest(pos_mask, not_mask) then
-    return false
+function grid_map.suround(map, box, mask)
+  for _, position in pairs(bbutil.get_surounding_points(box)) do
+    insert(map, position, mask)
   end
-  return bit32.btest(pos_mask, mask)
 end
 
 return grid_map

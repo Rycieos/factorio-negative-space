@@ -1,5 +1,9 @@
+local bbutil = require("scripts.util.bounding_box")
 local grid_map = require("scripts.util.grid_map")
 local prototype_util = require("scripts.util.prototype")
+
+local math2d = require("math2d")
+local subtract = math2d.position.subtract
 
 local GridMask = grid_map.GridMask
 
@@ -36,12 +40,15 @@ function on_setup_blueprint(event)
     if prototype and prototype_util.entity_is_collidable(prototype) then
       -- Exclude the tile it is on. We will check for other collision later.
       grid_map.insert(map, entity.position, GridMask.blocked)
-      if prototype_util.entity_is_belt_connectable(prototype) then
-        grid_map.suround(map, entity.position, GridMask.belt)
-      end
 
       local real_entity = mapping[entity.entity_number]
       if real_entity then
+        if prototype_util.entity_is_belt_connectable(prototype) then
+          -- It seems that the BP position and the real position are the same, but that might not always be the case.
+          local box = bbutil.offset_and_round(real_entity.bounding_box, subtract(entity.position, real_entity.position))
+          grid_map.suround(map, box, GridMask.belt)
+        end
+
         for i = 1, #real_entity.fluidbox do
           for _, connection in pairs(real_entity.fluidbox.get_pipe_connections(i)) do
             if not connection.target then
@@ -56,8 +63,8 @@ function on_setup_blueprint(event)
   local changed = false
   for x, row in pairs(map) do
     for y, grid_point in pairs(row) do
-      local position = { x = x, y = y }
-      if grid_map.matches(map, position, GridMask.belt + GridMask.fluid, GridMask.blocked) then
+      local position = { x = x + 0.5, y = y + 0.5 }
+      if bit32.btest(grid_point, GridMask.belt + GridMask.fluid) and not bit32.btest(grid_point, GridMask.blocked) then
         if
           surface.can_place_entity({
             name = "negative-space",
