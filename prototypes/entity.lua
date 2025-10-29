@@ -1,3 +1,5 @@
+local graphic = require("prototypes.graphic")
+
 data:extend({
   {
     type = "simple-entity-with-owner",
@@ -20,22 +22,15 @@ data:extend({
       "not-upgradable",
       "not-in-kill-statistics",
     },
-    icon = "__negative_space__/graphics/icon.png",
-    icon_size = 48,
+    icons = graphic.icons,
     minable = { mining_time = 0.1 },
     placeable_by = { item = "negative-space", count = 1 },
     protected_from_tile_building = false,
     remove_decoratives = "false",
     selection_box = { { -0.5, -0.5 }, { 0.5, 0.5 } },
     pictures = {
-      {
-        filename = "__negative_space__/graphics/icon.png",
-        size = 48,
-      },
-      {
-        filename = "__negative_space__/graphics/icon.png",
-        size = 48,
-      },
+      graphic.picture,
+      graphic.picture,
     },
     -- We will use graphics_variation as our stable flag.
     random_variation_on_create = false,

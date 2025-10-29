@@ -1,3 +1,5 @@
+local graphic = require("prototypes.graphic")
+
 data:extend({
   {
     type = "custom-input",
@@ -12,9 +14,7 @@ data:extend({
     name = "give-negative-space",
     action = "lua",
     associated_control_input = "give-negative-space",
-    icon = "__negative_space__/graphics/icon.png",
-    icon_size = 48,
-    small_icon = "__negative_space__/graphics/icon.png",
-    small_icon_size = 48,
+    icons = graphic.icons,
+    small_icons = graphic.icons,
   },
 })

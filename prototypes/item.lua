@@ -1,11 +1,11 @@
 local item_sounds = require("__base__.prototypes.item_sounds")
+local graphic = require("prototypes.graphic")
 
 data:extend({
   {
     type = "item",
     name = "negative-space",
-    icon = "__negative_space__/graphics/icon.png",
-    icon_size = 48,
+    icons = graphic.icons,
     flags = { "only-in-cursor", "not-stackable" },
     auto_recycle = false,
     subgroup = "spawnables",
