@@ -1,0 +1,13 @@
+{
+  "name": "negative_space",
+  "version": "0.1.0",
+  "title": "Negative Space",
+  "author": "rycieos",
+  "factorio_version": "2.0",
+  "dependencies": [
+      "base >= 2.0.7"
+  ],
+  "description": "Adds a negative space entity for marking where empty space must be in blueprints that removes entities after the blueprint is placed. Optionally automatically adds negative space around belts or fluid pipes.",
+  "homepage": "https://github.com/Rycieos/factorio-negative-space",
+  "contact": "https://github.com/Rycieos/factorio-negative-space/issues/new/choose"
+}
