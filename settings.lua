@@ -4,7 +4,18 @@ data:extend({
     type = "color-setting",
     setting_type = "startup",
     default_value = { r = 1.0, g = 0, b = 1.0 },
-    order = "a[negative_space][icon]",
+    order = "a[negative_space][icon]a",
+  },
+  {
+    name = "__negative_space__-graphic-style",
+    type = "string-setting",
+    setting_type = "startup",
+    default_value = "basic",
+    allowed_values = {
+      "basic",
+      "border",
+    },
+    order = "a[negative_space][icon]b",
   },
   {
     name = "__negative_space__-blueprint-belts",
