@@ -37,18 +37,19 @@ end
 ---@param event EventData.on_built_entity
 function on_built_entity(event)
   local entity = event.entity
-  if entity.name == "negative-space" then
+  if entity.graphics_variation == 2 then
+    -- This is the second time placing this, so delete it.
+    entity.mine()
+  elseif entity.name == "negative-space" then
+    -- This is a non-ghost.
     entity.graphics_variation = 2
   else
-    if entity.graphics_variation == 1 then
-      local player = game.get_player(event.player_index)
-      if not player then
-        return
-      end
-      replace_entity(entity, player)
-    else
-      entity.mine()
+    -- This is a ghost, and must be replaced with a non-ghost.
+    local player = game.get_player(event.player_index)
+    if not player then
+      return
     end
+    replace_entity(entity, player)
   end
 end
 
