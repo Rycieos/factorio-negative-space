@@ -1,6 +1,6 @@
 require("__core__/lualib/story")
 require("__negative_space__/prototypes/simulation/util")
-require("__negative_space__/control")
+require("__negative_space__/scripts/blueprint")
 
 player = game.simulation.create_test_player({ name = "Player" })
 player.teleport({ 0, 8.5 })
@@ -18,12 +18,41 @@ game.surfaces[1].create_entities_from_blueprint_string({
   position = { 0, 0 },
 })
 
+local next = "belts"
+local settings_override = {}
+
+---@param belts boolean
+---@param pipes boolean
+local function override_settings(belts, pipes)
+  settings_override["__negative_space__-blueprint-belts"] = { value = belts }
+  settings_override["__negative_space__-blueprint-pipes"] = { value = pipes }
+end
+
+-- Re-register to inject custom settings values. The game does not let us change
+-- these settings, even though we created them, because it does not think this
+-- scenario is part of the mod.
+script.on_event(defines.events.on_player_setup_blueprint, function(event)
+  on_setup_blueprint(event, settings_override)
+end)
+
 tip_story_init({
   {
     {
       name = "start",
       action = function()
         game.simulation.camera_player_cursor_direction = defines.direction.north
+
+        -- Cycle through the settings to show the player their options.
+        if next == "belts" then
+          override_settings(true, false)
+          next = "pipes"
+        elseif next == "pipes" then
+          override_settings(false, true)
+          next = "both"
+        else
+          override_settings(true, true)
+          next = "belts"
+        end
       end,
     },
     {

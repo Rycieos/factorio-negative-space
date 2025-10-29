@@ -1,6 +1,5 @@
 require("__core__/lualib/story")
 require("__negative_space__/prototypes/simulation/util")
-require("__negative_space__/control")
 
 -- Unregister to prevent auto creating negative space on copy.
 script.on_event(defines.events.on_player_setup_blueprint, nil)

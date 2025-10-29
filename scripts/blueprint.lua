@@ -9,7 +9,8 @@ local GridMask = grid_map.GridMask
 
 -- Add negative space to a new blueprint around belts and pipes.
 ---@param event EventData.on_player_setup_blueprint
-function on_setup_blueprint(event)
+---@param settings_override? {[string]: ModSetting} Used to override player settings in simulations.
+function on_setup_blueprint(event, settings_override)
   -- See this thread for why this is so complicated:
   -- https://forums.factorio.com/viewtopic.php?p=661598#p661598
   ---@type LuaRecord|LuaItemStack
@@ -24,6 +25,13 @@ function on_setup_blueprint(event)
 
   local entities = bp.get_blueprint_entities()
   if not entities or #entities == 0 then
+    return
+  end
+
+  local player_settings = settings_override or settings.get_player_settings(event.player_index)
+  local setting_belts = player_settings["__negative_space__-blueprint-belts"].value --[[@as boolean]]
+  local setting_pipes = player_settings["__negative_space__-blueprint-pipes"].value --[[@as boolean]]
+  if not setting_belts and not setting_pipes then
     return
   end
 
@@ -43,16 +51,18 @@ function on_setup_blueprint(event)
 
       local real_entity = mapping[entity.entity_number]
       if real_entity then
-        if prototype_util.entity_is_belt_connectable(prototype) then
+        if setting_belts and prototype_util.entity_is_belt_connectable(prototype) then
           -- It seems that the BP position and the real position are the same, but that might not always be the case.
           local box = bbutil.offset_and_round(real_entity.bounding_box, subtract(entity.position, real_entity.position))
           grid_map.suround(map, box, GridMask.belt)
         end
 
-        for i = 1, #real_entity.fluidbox do
-          for _, connection in pairs(real_entity.fluidbox.get_pipe_connections(i)) do
-            if not connection.target then
-              grid_map.insert(map, connection.target_position, GridMask.fluid)
+        if setting_pipes then
+          for i = 1, #real_entity.fluidbox do
+            for _, connection in pairs(real_entity.fluidbox.get_pipe_connections(i)) do
+              if not connection.target then
+                grid_map.insert(map, connection.target_position, GridMask.fluid)
+              end
             end
           end
         end
