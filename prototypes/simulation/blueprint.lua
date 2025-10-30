@@ -1,6 +1,6 @@
 require("__core__/lualib/story")
 require("__negative_space__/prototypes/simulation/util")
-require("__negative_space__/scripts/blueprint")
+require("__negative_space__/control")
 
 player = game.simulation.create_test_player({ name = "Player" })
 player.teleport({ 0, 8.5 })

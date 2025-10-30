@@ -9,9 +9,6 @@ data:extend({
     dependencies = { "ghost-building", "copy-paste" },
     simulation = {
       init_file = "__negative_space__/prototypes/simulation/general.lua",
-      mods = {
-        "negative_space",
-      },
     },
   },
   {
@@ -24,9 +21,6 @@ data:extend({
     dependencies = { "negative-space" },
     simulation = {
       init_file = "__negative_space__/prototypes/simulation/blueprint.lua",
-      mods = {
-        "negative_space",
-      },
     },
   },
 })
