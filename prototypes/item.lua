@@ -15,4 +15,14 @@ data:extend({
     stack_size = 1,
     place_result = "negative-space",
   },
+  {
+    type = "item",
+    name = "negative-space-auto",
+    icons = graphic.icons,
+    flags = { "only-in-cursor", "not-stackable" },
+    auto_recycle = false,
+    subgroup = "spawnables",
+    stack_size = 1,
+    place_result = "negative-space-auto",
+  },
 })

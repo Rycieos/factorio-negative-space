@@ -1,5 +1,12 @@
 local prototype_util = {}
 
+---@param entity LuaEntity
+---@return boolean
+function prototype_util.is_auto_neg_space(entity)
+  return entity.name == "negative-space-auto"
+    or (entity.type == "entity-ghost" and entity.ghost_name == "negative-space-auto")
+end
+
 -- Returns true if the entity prototype will colide with objects.
 ---@param entity LuaEntityPrototype
 ---@return boolean
@@ -25,6 +32,15 @@ function prototype_util.entity_is_belt_connectable(entity)
     or entity.type == "splitter"
     or entity.type == "transport-belt"
     or entity.type == "underground-belt"
+end
+
+-- Return the output or input type of an underground or linked belt, otherwise nil.
+---@param entity LuaEntity
+---@return BeltConnectionType?
+function prototype_util.get_under_belt_type(entity)
+  return (entity.type == "underground-belt" and entity.belt_to_ground_type)
+    or (entity.type == "linked-belt" and entity.linked_belt_type)
+    or nil
 end
 
 return prototype_util

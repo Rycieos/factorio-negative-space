@@ -1,3 +1,7 @@
+local grid_map = require("scripts.util.grid_map")
+local prototype_util = require("scripts.util.prototype")
+local space_mask = require("scripts.util.space_mask")
+
 ---@param surface LuaSurface
 ---@param player LuaPlayer
 ---@param position MapPosition
@@ -40,6 +44,32 @@ function on_built_entity(event)
   if entity.graphics_variation == 2 then
     -- This is the second time placing this, so delete it.
     entity.mine()
+  elseif prototype_util.is_auto_neg_space(entity) then
+    if entity.tags then
+      local player = game.get_player(event.player_index)
+      if player then
+        local mask = entity.tags.negative_space_mask --[[@as int16]]
+        mask = space_mask.rotate_mask(mask, entity.direction / 4)
+
+        -- Check if an entity below this needs un-deleting.
+        local other_entities = entity.surface.find_entities_filtered({
+          position = entity.position,
+          to_be_deconstructed = false,
+        })
+        local player_settings = settings.get_player_settings(event.player_index)
+        for _, other_entity in pairs(other_entities) do
+          if not prototype_util.is_auto_neg_space(other_entity) then
+            if grid_map.should_be_removed(other_entity, mask, entity.position, player_settings) then
+              other_entity.order_deconstruction(player.force, player, 1)
+            end
+          end
+        end
+      end
+    end
+
+    if entity.valid then
+      entity.mine()
+    end
   elseif entity.name == "negative-space" then
     -- This is a non-ghost.
     entity.graphics_variation = 2

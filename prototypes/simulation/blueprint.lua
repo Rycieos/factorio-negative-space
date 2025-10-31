@@ -22,10 +22,10 @@ local next = "belts"
 local settings_override = {}
 
 ---@param belts boolean
----@param pipes boolean
-local function override_settings(belts, pipes)
+---@param fluids boolean
+local function override_settings(belts, fluids)
   settings_override["__negative_space__-blueprint-belts"] = { value = belts }
-  settings_override["__negative_space__-blueprint-pipes"] = { value = pipes }
+  settings_override["__negative_space__-blueprint-fluids"] = { value = fluids }
 end
 
 -- Re-register to inject custom settings values. The game does not let us change
@@ -45,8 +45,8 @@ tip_story_init({
         -- Cycle through the settings to show the player their options.
         if next == "belts" then
           override_settings(true, false)
-          next = "pipes"
-        elseif next == "pipes" then
+          next = "fluids"
+        elseif next == "fluids" then
           override_settings(false, true)
           next = "both"
         else
