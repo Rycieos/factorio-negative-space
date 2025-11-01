@@ -60,6 +60,25 @@ function space_mask.rotate_mask(mask, rotation)
   return mask
 end
 
+-- Mirror a mask over the horizonal axis.
+---@param mask SpaceMask
+---@return SpaceMask
+function space_mask.flip_mask(mask)
+  local belt_to_east = bit32.extract(mask, 4)
+  local belt_to_west = bit32.extract(mask, 6)
+  local belt_from_east = bit32.extract(mask, 8)
+  local belt_from_west = bit32.extract(mask, 10)
+  local fluid_east = bit32.extract(mask, 12)
+  local fluid_west = bit32.extract(mask, 14)
+  mask = bit_replace(mask, belt_to_east, 6)
+  mask = bit_replace(mask, belt_to_west, 4)
+  mask = bit_replace(mask, belt_from_east, 10)
+  mask = bit_replace(mask, belt_from_west, 8)
+  mask = bit_replace(mask, fluid_east, 14)
+  mask = bit_replace(mask, fluid_west, 12)
+  return mask
+end
+
 -- Log a SpaceMask for debugging purposes.
 ---@param mask SpaceMask
 function space_mask.log(mask)

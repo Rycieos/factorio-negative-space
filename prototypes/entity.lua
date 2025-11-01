@@ -37,13 +37,16 @@ data:extend({
     render_layer = "lower-object",
   },
   {
-    type = "simple-entity-with-owner",
+    -- We don't need assembling, but this is the only Prototype that supports mirroring.
+    type = "assembling-machine",
     name = "negative-space-auto",
     alert_when_damaged = false,
     create_ghost_on_death = true,
     hide_resistances = true,
     healing_per_tick = 0.1,
-    collision_box = { { -0.4, -0.4 }, { 0.4, 0.4 } },
+    -- Collision box must be non-symmetrical for the game to mirror it when
+    -- mirroring blueprints.
+    collision_box = { { -0.5, -0.4 }, { 0.4, 0.4 } },
     collision_mask = {
       layers = {},
     },
@@ -53,6 +56,7 @@ data:extend({
       "not-flammable",
       "not-upgradable",
       "not-in-kill-statistics",
+      "not-in-made-in",
     },
     icons = graphic.icons,
     minable = { mining_time = 0.1 },
@@ -60,9 +64,19 @@ data:extend({
     protected_from_tile_building = false,
     remove_decoratives = "false",
     selection_box = { { -0.5, -0.5 }, { 0.5, 0.5 } },
-    pictures = {
-      graphic.picture,
-    },
     render_layer = "lower-object",
+
+    graphics_set = { animation = graphic.animation },
+    forced_symmetry = "horizontal",
+    crafting_categories = { "negative-space-void" },
+    crafting_speed = 1,
+    energy_source = { type = "void" },
+    energy_usage = "1W",
+  },
+  {
+    type = "recipe-category",
+    name = "negative-space-void",
+    hidden = true,
+    hidden_in_factoriopedia = true,
   },
 })

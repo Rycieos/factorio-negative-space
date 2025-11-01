@@ -49,6 +49,9 @@ function on_built_entity(event)
       local player = game.get_player(event.player_index)
       if player then
         local mask = entity.tags.negative_space_mask --[[@as int16]]
+        if entity.mirroring then
+          mask = space_mask.flip_mask(mask)
+        end
         mask = space_mask.rotate_mask(mask, entity.direction / 4)
 
         -- Check if an entity below this needs un-deleting.
