@@ -97,7 +97,7 @@ function grid_map.should_be_removed(entity, mask, mask_position, player_settings
       return true
     end
     if prototype_util.entity_is_belt_connectable(entity) then
-      if setting_belts == "belts" then
+      if setting_belts == "type" then
         return true
       else
         return space_mask.test_to_from_belts(entity, mask)
@@ -109,7 +109,7 @@ function grid_map.should_be_removed(entity, mask, mask_position, player_settings
       return true
     end
     if #entity.fluidbox > 0 then
-      if setting_fluids == "fluids" then
+      if setting_fluids == "type" then
         return true
       else
         return space_mask.test_fluids(entity, mask, mask_position)

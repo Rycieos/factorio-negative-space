@@ -39,7 +39,8 @@ local function replace_entity(entity, player)
 end
 
 ---@param event EventData.on_built_entity
-function on_built_entity(event)
+---@param settings_override? {[string]: ModSetting} Used to override player settings in simulations.
+function on_built_entity(event, settings_override)
   local entity = event.entity
   if entity.graphics_variation == 2 then
     -- This is the second time placing this, so delete it.
@@ -59,7 +60,7 @@ function on_built_entity(event)
           position = entity.position,
           to_be_deconstructed = false,
         })
-        local player_settings = settings.get_player_settings(event.player_index)
+        local player_settings = settings_override or settings.get_player_settings(event.player_index)
         for _, other_entity in pairs(other_entities) do
           if not prototype_util.is_auto_neg_space(other_entity) then
             if grid_map.should_be_removed(other_entity, mask, entity.position, player_settings) then

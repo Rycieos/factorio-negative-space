@@ -38,8 +38,8 @@ data:extend({
     default_value = "any",
     allowed_values = {
       "any",
-      "belts",
-      "directional",
+      "type",
+      "directional-type",
     },
     order = "a[negative_space][blueprint][b]belts",
   },
@@ -50,8 +50,8 @@ data:extend({
     default_value = "any",
     allowed_values = {
       "any",
-      "fluids",
-      "directional",
+      "type",
+      "directional-type",
     },
     order = "a[negative_space][blueprint][b]fluids",
   },
