@@ -65,7 +65,11 @@ function grid_map.map_fluid_entity(map, entity)
           math2d.position.subtract(connection.target_position, connection.position)
         )
         if direction then
-          grid_map.insert(map, connection.target_position, space_mask.fluids[direction])
+          local input = (connection.flow_direction == "input" or connection.flow_direction == "input-output")
+          local output = (connection.flow_direction == "output" or connection.flow_direction == "input-output")
+          local mask =
+            bit32.bor(input and space_mask.to_fluids[direction] or 0, output and space_mask.from_fluids[direction] or 0)
+          grid_map.insert(map, connection.target_position, mask)
         end
       end
     end

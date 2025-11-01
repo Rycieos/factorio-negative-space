@@ -4,7 +4,7 @@ local prototype_util = require("scripts.util.prototype")
 
 local space_mask = {}
 
----@alias SpaceMask SpaceMaskEnum|uint16
+---@alias SpaceMask SpaceMaskEnum|uint32
 ---@enum SpaceMaskEnum
 local SpaceMask = {
   blocked = 2 ^ 0,
@@ -18,10 +18,14 @@ local SpaceMask = {
   belt_from_east = 2 ^ 8,
   belt_from_south = 2 ^ 9,
   belt_from_west = 2 ^ 10,
-  fluid_north = 2 ^ 11,
-  fluid_east = 2 ^ 12,
-  fluid_south = 2 ^ 13,
-  fluid_west = 2 ^ 14,
+  fluid_to_north = 2 ^ 11,
+  fluid_to_east = 2 ^ 12,
+  fluid_to_south = 2 ^ 13,
+  fluid_to_west = 2 ^ 14,
+  fluid_from_north = 2 ^ 15,
+  fluid_from_east = 2 ^ 16,
+  fluid_from_south = 2 ^ 17,
+  fluid_from_west = 2 ^ 18,
 }
 space_mask.SpaceMask = SpaceMask
 
@@ -48,14 +52,18 @@ function space_mask.rotate_mask(mask, rotation)
     local belt_to_top = bit32.extract(mask, 6)
     local belt_from_lower = bit32.extract(mask, 7, 3)
     local belt_from_top = bit32.extract(mask, 10)
-    local fluid_lower = bit32.extract(mask, 11, 3)
-    local fluid_top = bit32.extract(mask, 14)
+    local fluid_to_lower = bit32.extract(mask, 11, 3)
+    local fluid_to_top = bit32.extract(mask, 14)
+    local fluid_from_lower = bit32.extract(mask, 15, 3)
+    local fluid_from_top = bit32.extract(mask, 18)
     mask = bit_replace(mask, belt_to_lower, 4, 3)
     mask = bit_replace(mask, belt_to_top, 3)
     mask = bit_replace(mask, belt_from_lower, 8, 3)
     mask = bit_replace(mask, belt_from_top, 7)
-    mask = bit_replace(mask, fluid_lower, 12, 3)
-    mask = bit_replace(mask, fluid_top, 11)
+    mask = bit_replace(mask, fluid_to_lower, 12, 3)
+    mask = bit_replace(mask, fluid_to_top, 11)
+    mask = bit_replace(mask, fluid_from_lower, 16, 3)
+    mask = bit_replace(mask, fluid_from_top, 15)
   end
   return mask
 end
@@ -68,14 +76,18 @@ function space_mask.flip_mask(mask)
   local belt_to_west = bit32.extract(mask, 6)
   local belt_from_east = bit32.extract(mask, 8)
   local belt_from_west = bit32.extract(mask, 10)
-  local fluid_east = bit32.extract(mask, 12)
-  local fluid_west = bit32.extract(mask, 14)
+  local fluid_to_east = bit32.extract(mask, 12)
+  local fluid_to_west = bit32.extract(mask, 14)
+  local fluid_from_east = bit32.extract(mask, 16)
+  local fluid_from_west = bit32.extract(mask, 18)
   mask = bit_replace(mask, belt_to_east, 6)
   mask = bit_replace(mask, belt_to_west, 4)
   mask = bit_replace(mask, belt_from_east, 10)
   mask = bit_replace(mask, belt_from_west, 8)
-  mask = bit_replace(mask, fluid_east, 14)
-  mask = bit_replace(mask, fluid_west, 12)
+  mask = bit_replace(mask, fluid_to_east, 14)
+  mask = bit_replace(mask, fluid_to_west, 12)
+  mask = bit_replace(mask, fluid_from_east, 18)
+  mask = bit_replace(mask, fluid_from_west, 16)
   return mask
 end
 
@@ -93,13 +105,13 @@ function space_mask.log(mask)
     ["7"] = "111",
   }
 
-  log("F   BF  BT  FBX")
-  log("WSENWSENWSEN")
-  local s = string.format("%.5o", mask)
+  log("FF  FT  BF  BT  FBX")
+  log("WSENWSENWSENWSEN")
+  local s = string.format("%.7o", mask)
   s = s:gsub(".", function(a)
     return oct2bin[a]
   end)
-  log(s)
+  log(string.sub(s, 3))
 end
 
 -- Belt mask for entities adjacent facing a direction that can be connected to.
@@ -130,17 +142,29 @@ local match_from_belts = {
   [defines.direction.south] = SpaceMask.belt_from_south,
   [defines.direction.west] = SpaceMask.belt_from_west,
 }
-space_mask.fluids = {
-  [defines.direction.north] = SpaceMask.fluid_south + SpaceMask.fluid,
-  [defines.direction.east] = SpaceMask.fluid_west + SpaceMask.fluid,
-  [defines.direction.south] = SpaceMask.fluid_north + SpaceMask.fluid,
-  [defines.direction.west] = SpaceMask.fluid_east + SpaceMask.fluid,
+space_mask.to_fluids = {
+  [defines.direction.north] = SpaceMask.fluid_to_south + SpaceMask.fluid,
+  [defines.direction.east] = SpaceMask.fluid_to_west + SpaceMask.fluid,
+  [defines.direction.south] = SpaceMask.fluid_to_north + SpaceMask.fluid,
+  [defines.direction.west] = SpaceMask.fluid_to_east + SpaceMask.fluid,
 }
-space_mask.match_fluids = {
-  [defines.direction.north] = SpaceMask.fluid_north,
-  [defines.direction.east] = SpaceMask.fluid_east,
-  [defines.direction.south] = SpaceMask.fluid_south,
-  [defines.direction.west] = SpaceMask.fluid_west,
+space_mask.from_fluids = {
+  [defines.direction.north] = SpaceMask.fluid_from_south + SpaceMask.fluid,
+  [defines.direction.east] = SpaceMask.fluid_from_west + SpaceMask.fluid,
+  [defines.direction.south] = SpaceMask.fluid_from_north + SpaceMask.fluid,
+  [defines.direction.west] = SpaceMask.fluid_from_east + SpaceMask.fluid,
+}
+space_mask.match_to_fluids = {
+  [defines.direction.north] = SpaceMask.fluid_to_north,
+  [defines.direction.east] = SpaceMask.fluid_to_east,
+  [defines.direction.south] = SpaceMask.fluid_to_south,
+  [defines.direction.west] = SpaceMask.fluid_to_west,
+}
+space_mask.match_from_fluids = {
+  [defines.direction.north] = SpaceMask.fluid_from_north,
+  [defines.direction.east] = SpaceMask.fluid_from_east,
+  [defines.direction.south] = SpaceMask.fluid_from_south,
+  [defines.direction.west] = SpaceMask.fluid_from_west,
 }
 
 -- Get all connecting points around a TransportBeltConnectable.
@@ -221,8 +245,16 @@ function space_mask.test_fluids(entity, mask, position)
         local direction = direction_util.get_direction_from_offset(
           math2d.position.subtract(connection.target_position, connection.position)
         )
-        if direction and bit32.btest(mask, space_mask.match_fluids[direction]) then
-          return true
+        if direction then
+          local input = (connection.flow_direction == "input" or connection.flow_direction == "input-output")
+          local output = (connection.flow_direction == "output" or connection.flow_direction == "input-output")
+          local connection_mask = bit32.bor(
+            input and space_mask.match_from_fluids[direction] or 0,
+            output and space_mask.match_to_fluids[direction] or 0
+          )
+          if bit32.btest(mask, connection_mask) then
+            return true
+          end
         end
       end
     end
