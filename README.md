@@ -26,7 +26,8 @@ This mod has not been extensively tested, so please report any issues.
 
 #### Known issues:
 
-* Redoing an undone action involving a negative space breaks the undo history.
+* Some undo or redo actions involving a negative space (not auto-generated
+  negative space) break the undo history.
 
 ### Getting help
 

@@ -102,7 +102,7 @@ function on_undo_redo(event)
           surface,
           player,
           target.position,
-          event.name == defines.events.on_redo_applied and 1 or nil
+          event.name == defines.events.on_redo_applied and 0 or nil
         )
       end
     end
