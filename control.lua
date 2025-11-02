@@ -27,7 +27,7 @@ end)
 -- It is possible to get an actual item in cheat mode.
 -- Also can get the auto version when pipetting.
 script.on_event(defines.events.on_player_pipette, function(event)
-  if event.item.name == "negative-space" or event.item.name == "negative-space-auto" then
+  if event.item.name == "negative-space-auto" then
     give_negative_space(event.player_index)
   end
 end)
