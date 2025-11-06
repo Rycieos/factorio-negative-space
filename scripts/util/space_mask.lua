@@ -223,7 +223,8 @@ function space_mask.test_to_from_belts(entity, mask)
   local match_mask = match_to_belts[direction]
 
   local rotation = direction / 4
-  for _, other_direction in pairs(direction_util.directions[entity.type]) do
+  local type = prototype_util.entity_type(entity)
+  for _, other_direction in pairs(direction_util.directions[type]) do
     match_mask = match_mask + match_from_belts[direction_util.rotate(other_direction, rotation)]
   end
 

@@ -45,7 +45,7 @@ function on_built_entity(event, settings_override)
   if entity.graphics_variation == 2 then
     -- This is the second time placing this, so delete it.
     entity.mine()
-  elseif prototype_util.is_auto_neg_space(entity) then
+  elseif prototype_util.entity_type(entity) == "negative-space-auto" then
     if entity.tags then
       local player = game.get_player(event.player_index)
       if player then
@@ -62,7 +62,7 @@ function on_built_entity(event, settings_override)
         })
         local player_settings = settings_override or settings.get_player_settings(event.player_index)
         for _, other_entity in pairs(other_entities) do
-          if not prototype_util.is_auto_neg_space(other_entity) then
+          if prototype_util.entity_type(other_entity) ~= "negative-space-auto" then
             if grid_map.should_be_removed(other_entity, mask, entity.position, player_settings) then
               other_entity.order_deconstruction(player.force, player, 1)
             end

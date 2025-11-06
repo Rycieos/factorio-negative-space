@@ -39,8 +39,9 @@ end
 ---@param map GridMap
 ---@param entity LuaEntity
 function grid_map.suround_belt_entity(map, entity)
+  local type = prototype_util.entity_type(entity)
   local belt_type = prototype_util.get_under_belt_type(entity)
-  local point_offsets = space_mask.generate_transport_belt_points(entity.type, entity.direction, belt_type)
+  local point_offsets = space_mask.generate_transport_belt_points(type, entity.direction, belt_type)
   local position = entity.position
   for offset, mask in pairs(point_offsets) do
     grid_map.insert(
