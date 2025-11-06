@@ -16,6 +16,8 @@ Features include:
 * An option to automatically add negative space around belts when creating
   blueprints (also works for copy paste).
 * Same as above, but for fluid pipes.
+* Auto-generated negative space can optionally only remove belt and fluid pipes
+  that would connect with belts or fluid pipes placed by the blueprint.
 * Customizing the style and color of the graphic.
 
 ![Thumbnail](https://raw.githubusercontent.com/Rycieos/factorio-negative-space/main/thumbnail.png)
@@ -26,8 +28,9 @@ This mod has not been extensively tested, so please report any issues.
 
 #### Known issues:
 
-* Some undo or redo actions involving a negative space (not auto-generated
-  negative space) break the undo history.
+* Some undo or redo actions involving a manually placed negative space (not
+  blueprint placed negative space or auto-generated negative space) break the
+  undo history.
 
 ### Getting help
 
