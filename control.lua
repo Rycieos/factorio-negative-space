@@ -35,8 +35,18 @@ end)
 
 script.on_event(defines.events.on_player_setup_blueprint, on_setup_blueprint)
 
-script.on_event(defines.events.on_player_selected_area, on_player_selected_area)
+script.on_event(defines.events.on_player_selected_area, function(event)
+  if event.item == "negative-space-tool" then
+    on_player_selected_area(event)
+  end
+end)
+
 script.on_event(
   { defines.events.on_player_alt_selected_area, defines.events.on_player_reverse_selected_area },
-  on_player_reverse_selected_area
+  ---@param event EventData.on_player_alt_selected_area | EventData.on_player_reverse_selected_area
+  function(event)
+    if event.item == "negative-space-tool" then
+      on_player_reverse_selected_area(event)
+    end
+  end
 )
