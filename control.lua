@@ -1,6 +1,7 @@
 require("scripts.blueprint")
 require("scripts.building")
 require("scripts.give_item")
+require("scripts.selection")
 
 script.on_event(defines.events.on_built_entity, on_built_entity, {
   { filter = "name", name = "negative-space" },
@@ -33,3 +34,9 @@ script.on_event(defines.events.on_player_pipette, function(event)
 end)
 
 script.on_event(defines.events.on_player_setup_blueprint, on_setup_blueprint)
+
+script.on_event(defines.events.on_player_selected_area, on_player_selected_area)
+script.on_event(
+  { defines.events.on_player_alt_selected_area, defines.events.on_player_reverse_selected_area },
+  on_player_reverse_selected_area
+)

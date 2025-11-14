@@ -5,6 +5,7 @@ local filename = style == "border" and "__negative_space__/graphics/negative-spa
   or "__negative_space__/graphics/negative-space.png"
 
 local tint = settings.startup["__negative_space__-graphic-color"].value --[[@as Color]]
+graphic.tint = tint
 
 ---@type data.IconData[]
 graphic.icons = {

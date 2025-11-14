@@ -25,4 +25,46 @@ data:extend({
     stack_size = 1,
     place_result = "negative-space-auto",
   },
+  {
+    type = "selection-tool",
+    name = "negative-space-tool",
+    icons = graphic.icons,
+    flags = { "only-in-cursor", "not-stackable", "spawnable" },
+    hidden = true,
+    select = {
+      border_color = graphic.tint,
+      cursor_box_type = "entity",
+      mode = "nothing",
+    },
+    alt_select = {
+      border_color = graphic.tint,
+      cursor_box_type = "entity",
+      mode = {
+        "deconstruct",
+        "same-force",
+      },
+      entity_filter_mode = "whitelist",
+      entity_filters = {
+        "negative-space",
+      },
+    },
+    reverse_select = {
+      border_color = graphic.tint,
+      cursor_box_type = "entity",
+      mode = {
+        "deconstruct",
+        "same-force",
+      },
+      entity_filter_mode = "whitelist",
+      entity_filters = {
+        "negative-space",
+      },
+    },
+    auto_recycle = false,
+    subgroup = "spawnables",
+    inventory_move_sound = item_sounds.planner_inventory_move,
+    pick_sound = item_sounds.planner_inventory_pickup,
+    drop_sound = item_sounds.planner_inventory_move,
+    stack_size = 1,
+  },
 })
