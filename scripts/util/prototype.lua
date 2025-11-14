@@ -7,6 +7,13 @@ function prototype_util.entity_type(entity)
   return entity.type == "entity-ghost" and entity.ghost_type or entity.type
 end
 
+-- Return the name of the Entity, resolving ghosts.
+---@param entity LuaEntity
+---@return string
+function prototype_util.entity_name(entity)
+  return entity.type == "entity-ghost" and entity.ghost_name or entity.name
+end
+
 -- Returns true if the entity prototype will colide with objects.
 ---@param entity LuaEntityPrototype
 ---@return boolean
