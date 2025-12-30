@@ -19,7 +19,7 @@ function on_player_selected_area(event)
           forced = false,
         })
       then
-        surface.create_entity({
+        local entity = surface.create_entity({
           name = "negative-space",
           force = player.force,
           player = player,
@@ -29,6 +29,9 @@ function on_player_selected_area(event)
         })
         if undo_index == 0 then
           undo_index = 1
+        end
+        if entity then
+          entity.graphics_variation = 2
         end
       end
     end
